@@ -1,0 +1,26 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android' // If using Kotlin
+apply plugin: 'com.facebook.react' // For React Native
+
+android {
+    compileSdkVersion 34
+    defaultConfig {
+        applicationId "com.locationreminderapp"
+        minSdkVersion 21
+        targetSdkVersion 34
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.core:core-ktx:1.12.0' // Example dependency
+    implementation 'com.facebook.react:react-native:+' // React Native dependency
+}
