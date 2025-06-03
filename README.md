@@ -1,50 +1,133 @@
-# Welcome to your Expo app 👋
+# Location-Based Reminder App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A React Native app with FastAPI backend that helps users remember important tasks when they're near relevant locations. When users are on the move, the app notifies them about nearby stores where they can complete items on their to-do list.
 
-## Get started
+## Features
 
-1. Install dependencies
+- Add reminders by category (groceries, shopping, pharmacy, etc.)
+- Background location tracking to detect when you're near relevant places
+- Push notifications when you're near a store that matches your reminder categories
+- Customizable settings for notification preferences and search radius
+- Energy-efficient background processing
 
-   ```bash
+## Technology Stack
+
+- **Frontend**: React Native, React Navigation, AsyncStorage
+- **Backend**: FastAPI, SQLAlchemy
+- **APIs**: Google Places API for location-based services
+- **Storage**: Local storage on device, SQLite for backend
+
+## Prerequisites
+
+- Node.js and npm
+- Python 3.8+
+- Google Places API key
+- React Native development environment setup (Android Studio / Xcode)
+
+## Getting Started
+
+### Backend Setup
+
+1. Navigate to the backend directory:
+   ```
+   cd backend
+   ```
+
+2. Create a virtual environment:
+   ```
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. Install dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
+
+4. Create a `.env` file with your Google API key:
+   ```
+   GOOGLE_PLACES_API_KEY=your_google_api_key_here
+   SECRET_KEY=your_secret_key_here
+   DATABASE_URL=sqlite:///./location_reminders.db
+   ```
+
+5. Start the FastAPI server:
+   ```
+   uvicorn main:app --reload --host 0.0.0.0 --port 8000
+   ```
+
+### Frontend Setup
+
+1. Install dependencies:
+   ```
+   cd LocationReminderApp
    npm install
    ```
 
-2. Start the app
+2. Configure API endpoint:
+   - Open `src/services/placesApi.js`
+   - Update `API_BASE_URL` to your backend server address
+   - For emulator: Android uses `10.0.2.2:8000`, iOS uses `localhost:8000`
+   - For physical device: use your computer's local IP address
 
-   ```bash
-   npx expo start
+3. Run the app:
+   ```
+   # For Android
+   npx react-native run-android
+   
+   # For iOS
+   cd ios && pod install && cd ..
+   npx react-native run-ios
    ```
 
-In the output, you'll find options to open the app in a
+## Project Structure
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+location_based_reminder/
+├── backend/               # FastAPI backend
+│   ├── main.py            # Main API endpoints
+│   ├── requirements.txt   # Dependencies
+│   └── .env               # Environment variables
+│
+└── LocationReminderApp/   # React Native frontend
+    ├── src/
+    │   ├── screens/       # UI screens
+    │   ├── services/      # API interactions and location tracking
+    │   └── utils/         # Helper functions
+    └── ...
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Android Specific Setup
 
-## Learn more
+For Android devices, you need to add location permissions to `AndroidManifest.xml`:
 
-To learn more about developing your project with Expo, look at the following resources:
+```xml
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+<uses-permission android:name="android.permission.VIBRATE" />
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## iOS Specific Setup
 
-## Join the community
+For iOS devices, add these to your `Info.plist`:
 
-Join our community of developers creating universal apps.
+```xml
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>We need your location to provide reminders when you are near stores.</string>
+<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+<string>We need background location access to notify you about nearby stores even when the app is closed.</string>
+<key>UIBackgroundModes</key>
+<array>
+    <string>location</string>
+</array>
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Future Enhancements
+
+- User authentication and cloud sync
+- Machine learning to predict which stores you're likely to visit
+- Smart categorization of reminders
+- Integration with popular shopping list apps
+- Custom notification preferences per reminder category
